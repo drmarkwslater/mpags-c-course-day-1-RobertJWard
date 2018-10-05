@@ -47,10 +47,12 @@ int main()
 	case '9':
 	  message.append("NINE");
 	  break;
+	default:
+	  break; //don't really need the default
 	}
       //  - Ignore any other (non-alpha) characters
       if (!isalpha(inChar))
-	  continue;
+	continue; //If the non-alpha character is a number it will already be converted
       //  - In each case, add result to a string variable
       char* outChar{&inChar};
       message.append(outChar);
