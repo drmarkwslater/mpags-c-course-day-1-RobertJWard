@@ -3,8 +3,9 @@
 
 int main()
 {
-  char inChar{'x'};
+  char inChar{'x'};       //Swapping these declarations around messes it up... why?
   std::string message{""};
+
   while(std::cin >> inChar)
     {
       //Loop until the user presses Enter then Ctrl+D
@@ -50,12 +51,13 @@ int main()
 	default:
 	  break; //don't really need the default
 	}
+      
       //  - Ignore any other (non-alpha) characters
       if (!isalpha(inChar))
 	continue; //If the non-alpha character is a number it will already be converted
+      
       //  - In each case, add result to a string variable
-      char* outChar{&inChar};
-      message.append(outChar);
+      message.append(&inChar);
     }
 
   //print out the new string
