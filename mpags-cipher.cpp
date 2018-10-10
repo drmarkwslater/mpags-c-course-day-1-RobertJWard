@@ -1,9 +1,43 @@
 #include<iostream>
 #include<string>
+#include<vector>
 
-int main()
+int main(int argc, char* argv[])
 {
-  char inChar{'x'};       //Swapping these declarations around messes it up... why?
+  char inChar{'x'};       //For some reason it prints out an @ between letters now!
+
+  const std::vector<std::string> cmdLineArgs{argv, argv+argc};
+  
+  for (unsigned int i{0}; i < cmdLineArgs.size(); i++)
+    {
+      std::cout << cmdLineArgs[i] << std::endl;
+      if(cmdLineArgs[i]=="--help" || cmdLineArgs[i]=="-h")
+	{
+	  std::cout << "This is a help screen!" << std::endl;
+	  return 0;
+	}
+      else if(cmdLineArgs[i]=="--version")
+	{
+	  std::cout << "This is version alpha 0.x" << std::endl;
+	  return 0;
+	}
+      else if(cmdLineArgs[i]=="-i")
+	{
+	  std::cout << "Input file is: " << cmdLineArgs[i+1] << std::endl;
+	  i++; //Skip next argument as it's the file name
+	}
+      else if(cmdLineArgs[i]=="-o")
+	{
+	  std::cout << "Output file is: " << cmdLineArgs[i+1] << std::endl;
+	  i++;
+	}
+      else if(cmdLineArgs[i]=="./mpags-cipher")
+	{//do nothing, it's the program name
+	}
+      else
+	std::cout << "Unknown option!" << std::endl;
+    }
+  
   std::string message{""};
 
   while(std::cin >> inChar)
@@ -12,7 +46,7 @@ int main()
 
       //Take each letter from user input and in each case:
 
-      //  - Convert to upper case
+      //  - Convert to upper case 
       inChar = toupper(inChar);
 
       //  - Change numbers to words
