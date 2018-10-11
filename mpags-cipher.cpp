@@ -2,13 +2,19 @@
 #include<string>
 #include<vector>
 
+#include <cctype>
+
 int main(int argc, char* argv[])
 {
-  char inChar{'x'};       //For some reason it prints out an @ between letters now!
-
   const std::vector<std::string> cmdLineArgs{argv, argv+argc};
-  
-  for (unsigned int i{0}; i < cmdLineArgs.size(); i++)
+
+  char inChar{'x'};       //For some reason it prints out an @ between letters now!
+  std::string inputFile{""};
+  std::string outputFile{""};
+  typedef std::vector<std::string>::size_type size_type;
+  const size_type nCmdLineArgs {cmdLineArgs.size()};
+
+  for (unsigned int i{1}; i < cmdLineArgs.size(); i++)
     {
       std::cout << cmdLineArgs[i] << std::endl;
       if(cmdLineArgs[i]=="--help" || cmdLineArgs[i]=="-h")
@@ -23,19 +29,34 @@ int main(int argc, char* argv[])
 	}
       else if(cmdLineArgs[i]=="-i")
 	{
-	  std::cout << "Input file is: " << cmdLineArgs[i+1] << std::endl;
-	  i++; //Skip next argument as it's the file name
+	  if (i == nCmdLineArgs-1) {
+	    std::cerr << "[error] -i requires a filename argument" << std::endl;
+	    // exit main with non-zero return to indicate failure
+	    return 1;
+	  }
+	  else 
+	    {
+	      std::cout << "Input file is: " << cmdLineArgs[i+1] << std::endl;
+	      inputFile = cmdLineArgs[i+1];
+	      i++; //Skip next argument as it's the file name
+	    }
 	}
       else if(cmdLineArgs[i]=="-o")
 	{
-	  std::cout << "Output file is: " << cmdLineArgs[i+1] << std::endl;
-	  i++;
-	}
-      else if(cmdLineArgs[i]=="./mpags-cipher")
-	{//do nothing, it's the program name
+	  if (i == nCmdLineArgs-1) {
+	    std::cerr << "[error] -o requires a filename argument" << std::endl;
+	    // exit main with non-zero return to indicate failure
+	    return 1;
+	  }
+	  else 
+	    {
+	      std::cout << "Output file is: " << cmdLineArgs[i+1] << std::endl;
+	      outputFile = cmdLineArgs[i+1];
+	      i++;
+	    }
 	}
       else
-	std::cout << "Unknown option!" << std::endl;
+	std::cout << "Unknown option:  " << cmdLineArgs[i] << std::endl;
     }
   
   std::string message{""};
@@ -91,7 +112,7 @@ int main(int argc, char* argv[])
 	continue; //If the non-alpha character is a number it will already be converted
       
       //  - In each case, add result to a string variable
-      message.append(&inChar);
+      message += inChar;
     }
 
   //print out the new string
